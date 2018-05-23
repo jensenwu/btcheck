@@ -16,7 +16,7 @@ def jiance(myAddress):
                 #print html
                 a= html['wallet']['final_balance']
                 b=html['wallet']['total_received']
-                return (a,b)
+                return {'final_balance':a,'total_received':b}
         else:
                 print None
                 return None
@@ -38,8 +38,9 @@ def index(request):
     c = long(b,16)
     c*=16
     add_list = []
-    add_dict = {}
+
     for i in xrange(16):
+        add_dict = {}
         add_dict['mySecretKey'] = encode_privkey(c, "wif")
         add_dict['mySecretKey_com'] = encode_privkey(c,'wif_compressed')
         add_dict['myAddress'] = pubtoaddr(privtopub(add_dict['mySecretKey']))
