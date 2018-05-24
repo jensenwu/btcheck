@@ -1,9 +1,12 @@
-from django.shortcuts import render
+#-*- coding:utf-8 -*-
+from django.http import HttpResponse
+from django.shortcuts import render, render_to_response
 import requests
 import json
 import random
 from bitcoin import *
 # Create your views here.
+
 
 def jiance(myAddress):
         user_agent="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1"
@@ -21,6 +24,7 @@ def jiance(myAddress):
                 print None
                 return None
 
+
 def random_number():
     number_weishu  = random.randint(3,76)
     sum = ''
@@ -32,13 +36,12 @@ def random_number():
     else:
         random_number()
 
-def index(request):
-    number = random_number()
-    b = hex(number)
+
+def get_list(number):
+    b = hex(long(number))
     c = long(b,16)
     c*=16
     add_list = []
-
     for i in xrange(16):
         add_dict = {}
         add_dict['mySecretKey'] = encode_privkey(c, "wif")
@@ -49,5 +52,22 @@ def index(request):
         add_dict['blance_my_com'] = jiance(add_dict['myAddress_com'])
         c += 1
         add_list.append(add_dict)
+    return add_list
 
-    return render(request,'index.html',{'add_list':add_list,'number':number})
+def index(request):
+        if request.method =="POST":
+            number1 = request.POST.get("number")
+            print number1
+            if number1 is not None:
+                number = number1
+                add_list = get_list(number)
+                return render(request,'index.html',{'add_list':add_list,'number':number})
+            else:
+                number = random_number()
+                add_list = get_list(number)
+                return render(request,'index.html',{'add_list':add_list,'number':number})
+        else:
+
+            number = random_number()
+            add_list = get_list(number)
+            return render(request,'index.html',{'add_list':add_list,'number':number})

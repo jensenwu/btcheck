@@ -9,8 +9,12 @@
     </style>
 </head>
 <body>
+<form name="input" action="." method="post">
+想看的页数: <input type="text" name="number" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+<input type="submit" value="Submit">
+{% csrf_token %}
+</form>
 <p>第{{ number }}页</p>
-
 <table border="1"  cellspacing="0">
     <tr>
         <th>秘钥</th>
