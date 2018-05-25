@@ -61,13 +61,14 @@ def index(request):
             if number1 is not None:
                 number = number1
                 add_list = get_list(number)
-                return render(request,'index.html',{'add_list':add_list,'number':number})
+                return render(request, 'index.html',{'add_list':add_list,'number':number})
             else:
                 number = random_number()
                 add_list = get_list(number)
-                return render(request,'index.html',{'add_list':add_list,'number':number})
+                return render(request, 'index.html',{'add_list':add_list,'number':number})
         else:
 
             number = random_number()
             add_list = get_list(number)
-            return render(request,'index.html',{'add_list':add_list,'number':number})
+            return render(request, 'index.html',{'add_list':add_list,'number':number})
+
