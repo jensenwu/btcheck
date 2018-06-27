@@ -5,10 +5,21 @@ import requests
 import json
 import random
 from bitcoin import *
+from django.conf import settings  # 导入配置文件
+from django.core.mail import send_mail  # 导入发送邮件的包
 # Create your views here.
 
 
-def jiance(myAddress):
+def Email_send(title,content):
+    send_title = title
+    send_message = content
+    send_obj_list = ['jensen.wu@foxmail.com']  # 收件人列表
+    send_html_message = '<h1>包含 html 标签且不希望被转义的内容</h1>'
+    send_status = send_mail(send_title, send_message, settings.EMAIL_HOST_USER, send_obj_list, send_html_message)
+    print send_status  # 发送状态,可用可不用
+
+
+def jiance(myAddress,number):
         user_agent="Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1"
         headers={'User-agent':user_agent}
         url = 'https://blockchain.info/multiaddr?active='+myAddress
@@ -19,6 +30,8 @@ def jiance(myAddress):
                 #print html
                 a= html['wallet']['final_balance']
                 b=html['wallet']['total_received']
+                if a != 0 or b != 0:
+                    Email_send(myAddress,number)
                 return {'final_balance':a,'total_received':b}
         else:
                 print None
@@ -48,8 +61,8 @@ def get_list(number):
         add_dict['mySecretKey_com'] = encode_privkey(c,'wif_compressed')
         add_dict['myAddress'] = pubtoaddr(privtopub(add_dict['mySecretKey']))
         add_dict['myAddress_com'] = pubtoaddr(privtopub(add_dict['mySecretKey_com']))
-        add_dict['blance_my'] = jiance(add_dict['myAddress'])
-        add_dict['blance_my_com'] = jiance(add_dict['myAddress_com'])
+        add_dict['blance_my'] = jiance(add_dict['myAddress'],number)
+        add_dict['blance_my_com'] = jiance(add_dict['myAddress_com'],number)
         c += 1
         add_list.append(add_dict)
     return add_list
