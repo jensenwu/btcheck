@@ -51,6 +51,7 @@ def random_number():
 
 
 def get_list(number):
+ try:
     b = hex(long(number))
     c = long(b,16)
     c*=16
@@ -66,6 +67,10 @@ def get_list(number):
         c += 1
         add_list.append(add_dict)
     return add_list
+ except Exception,e:
+     a = random_number()
+     get_list(a)
+
 
 def index(request):
         if request.method =="POST":
@@ -84,4 +89,5 @@ def index(request):
             number = random_number()
             add_list = get_list(number)
             return render(request, 'index.html',{'add_list':add_list,'number':number})
+
 
