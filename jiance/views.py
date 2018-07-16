@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
 import requests
+from time import time
 import json
 import random
 from bitcoin import *
@@ -73,21 +74,23 @@ def get_list(number):
 
 
 def index(request):
+        times = time.asctime( time.localtime(time.time()) )
         if request.method =="POST":
             number1 = request.POST.get("number")
+
             print number1
             if number1 is not None:
                 number = number1
                 add_list = get_list(number)
-                return render(request, 'index.html',{'add_list':add_list,'number':number})
+                return render(request, 'index.html',{'add_list':add_list,'number':number,'time':times})
             else:
                 number = random_number()
                 add_list = get_list(number)
-                return render(request, 'index.html',{'add_list':add_list,'number':number})
+                return render(request, 'index.html',{'add_list':add_list,'number':number,'time':times})
         else:
 
             number = random_number()
             add_list = get_list(number)
-            return render(request, 'index.html',{'add_list':add_list,'number':number})
+            return render(request, 'index.html',{'add_list':add_list,'number':number,'time':times})
 
 
